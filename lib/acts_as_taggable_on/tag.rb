@@ -15,22 +15,27 @@ module ActsAsTaggableOn
     validates_uniqueness_of :name, scope: :locale
     validates_length_of :name, :maximum => 255
 
+    ### CALLBACK:
+    before_validation do
+      self.locale ||= I18n.locale
+    end
+
     ### SCOPES:
 
     def self.named(name)
-      where(["lower(name) = ?", name.downcase])
+      where(["lower(name) = ? collate utf8_bin AND locale = ?", name.downcase, I18n.locale])
     end
 
     def self.named_any(list)
-      where(list.map { |tag| sanitize_sql(["lower(name) = ?", tag.to_s.mb_chars.downcase]) }.join(" OR "))
+      where(list.map { |tag| sanitize_sql(["lower(name) = ? collate utf8_bin AND locale = ?", tag.to_s.mb_chars.downcase, I18n.locale]) }.join(" OR "))
     end
 
     def self.named_like(name)
-      where(["name #{like_operator} ? ESCAPE '!'", "%#{escape_like(name)}%"])
+      where(["name #{like_operator} ? ESCAPE '!' COLLATE utf8_bin AND locale = ?", "%#{escape_like(name)}%", I18n.locale])
     end
 
     def self.named_like_any(list)
-      where(list.map { |tag| sanitize_sql(["name #{like_operator} ? ESCAPE '!'", "%#{escape_like(tag.to_s)}%"]) }.join(" OR "))
+      where(list.map { |tag| sanitize_sql(["name #{like_operator} ? ESCAPE '!' COLLATE utf8_bin AND locale = ?", "%#{escape_like(tag.to_s)}%", I18n.locale]) }.join(" OR "))
     end
 
     ### CLASS METHODS:
