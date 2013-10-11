@@ -81,7 +81,7 @@ module ActsAsTaggableOn
         
           class_eval do
             has_many :taggings, :as => :taggable, :dependent => :destroy, :include => :tag, :class_name => "ActsAsTaggableOn::Tagging"
-            has_many :base_tags, :through => :taggings, :source => :tag, :class_name => "ActsAsTaggableOn::Tag"
+            has_many :base_tags, :through => :taggings, :source => :tag, :class_name => "ActsAsTaggableOn::Tag", :conditions => proc { "tags.locale = '#{I18n.locale}'" }
 
             def self.taggable?
               true

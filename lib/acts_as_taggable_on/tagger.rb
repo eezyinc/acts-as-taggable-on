@@ -17,7 +17,7 @@ module ActsAsTaggableOn
         class_eval do
           has_many :owned_taggings, opts.merge(:as => :tagger, :dependent => :destroy,
                                                :include => :tag, :class_name => "ActsAsTaggableOn::Tagging")
-          has_many :owned_tags, :through => :owned_taggings, :source => :tag, :uniq => true, :class_name => "ActsAsTaggableOn::Tag"
+          has_many :owned_tags, :through => :owned_taggings, :source => :tag, :uniq => true, :class_name => "ActsAsTaggableOn::Tag", :conditions => proc { "tags.locale = '#{I18n.locale}'" }
         end
 
         include ActsAsTaggableOn::Tagger::InstanceMethods

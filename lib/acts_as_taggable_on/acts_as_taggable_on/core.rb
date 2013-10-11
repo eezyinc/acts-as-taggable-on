@@ -33,7 +33,8 @@ module ActsAsTaggableOn::Taggable
             has_many context_tags, :through => context_taggings,
                                    :source => :tag,
                                    :class_name => "ActsAsTaggableOn::Tag",
-                                   :order => taggings_order
+                                   :order => taggings_order, 
+                                   :conditions => proc { "tags.locale = '#{I18n.locale}'" }
           end
 
           class_eval %(
