@@ -35,7 +35,7 @@ module ActsAsTaggableOn::Taggable
       end
       
       def tag_counts_on(context, options = {})
-        all_tag_counts(options.merge({:on => context.to_s}))
+        all_tag_counts(options.merge({:on => context.to_s, :conditions => { 'tags.locale' => I18n.locale } }))
       end
       
       ##
