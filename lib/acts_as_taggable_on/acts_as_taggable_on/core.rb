@@ -319,6 +319,7 @@ module ActsAsTaggableOn::Taggable
             # First off order the array of tag objects to match the tag list
             # rather than existing tags followed by new tags
             tags = tag_list.map{|l| tags.detect{|t| t.name.downcase == l.downcase}}
+            tags.compact!
             # To preserve tags in the order in which they were added
             # delete all current tags and create new tags if the content or order has changed
             old_tags = (tags == current_tags ? [] : current_tags)
